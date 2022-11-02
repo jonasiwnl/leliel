@@ -1,18 +1,24 @@
 use std::env::{args, Args};
+use std::process;
 
 mod scripts;
 use crate::scripts::run::run;
 
 fn main() {
-    let mut args: Args = args();
-
     println!("\nSTARTING...\n");
 
-    let flag = args.nth(1).unwrap_or(
-        "ERROR: enter a process. run 'h' for help.".to_string());
+    let mut args: Args = args();
+    let flag = args.nth(1).unwrap_or_else(|| {
+        eprintln!("ERROR: enter a flag.");
+        process::exit(1);
+    });
+    let needle = args.nth(0).unwrap_or_else(|| {
+        eprintln!("ERROR: enter a needle.");
+        process::exit(1);
+    });
 
-    match run(&flag) {
-        Ok(e) => e,
+    match run(&flag, &needle) {
+        Ok(o) => o,
         Err(c) => println!("ERROR: {}", c),
     }
 }

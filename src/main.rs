@@ -1,21 +1,23 @@
-use std::env::{args, Args};
-use std::process;
+use clap::Parser;
 
 mod scripts;
 use crate::scripts::run::run;
 
+#[derive(Parser)]
+#[clap(author = "jonas", version, about)]
+/// a basic osint cli
+struct Command {
+    flag: String,
+    #[clap(default_value_t = ("".to_string()), short, long)]
+    needle: String,
+}
+
 fn main() {
     println!("\nSTARTING...\n");
 
-    let mut args: Args = args();
-    let flag = args.nth(1).unwrap_or_else(|| {
-        eprintln!("ERROR: enter a flag.");
-        process::exit(1);
-    });
-    let needle = args.nth(0).unwrap_or_else(|| {
-        eprintln!("ERROR: enter a needle.");
-        process::exit(1);
-    });
+    let args = Command::parse();
+    let flag = args.flag;
+    let needle = args.needle;
 
     match run(&flag, &needle) {
         Ok(o) => o,

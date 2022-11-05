@@ -4,7 +4,7 @@ mod scripts;
 use crate::scripts::run::run;
 
 #[derive(Parser)]
-#[clap(author = "jonas", version, about)]
+#[clap(author = "arael", version, about)]
 /// a basic osint cli
 struct Command {
     flag: String,

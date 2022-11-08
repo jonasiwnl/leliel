@@ -12,15 +12,16 @@ struct Command {
     needle: String,
 }
 
-fn main() {
+#[tokio::main]
+async fn main() -> Result<(), reqwest::Error> {
     println!("\nSTARTING...\n");
 
     let args = Command::parse();
     let flag = args.flag;
     let needle = args.needle;
 
-    match run(&flag, &needle) {
-        Ok(o) => o,
-        Err(c) => println!("ERROR: {}", c),
+    match run(&flag, &needle).await {
+        Ok(o) => Ok(o),
+        Err(c) => Err(c),
     }
 }

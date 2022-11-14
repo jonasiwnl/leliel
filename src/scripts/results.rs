@@ -17,20 +17,18 @@ impl Status {
     }
 }
 
-pub struct QueryResult<'a> {
-    username: &'a String,
-    url: &'a String,
-    user_url: &'a String,
-    status: Status,
+pub struct QueryResult {
+    pub url: String,
+    pub user_url: String,
+    pub status: Status,
     query_time: i32,
 }
 
-impl<'a> QueryResult<'_> {
-    pub fn new(username: &String,
-               url: &String,
-               user_url: &String,
+impl QueryResult {
+    pub fn new(url: String,
+               user_url: String,
                status: Status,
                query_time: i32) -> Self {
-        QueryResult{ username, url, user_url, status, query_time }
+        QueryResult{ url, user_url, status, query_time }
     }
 }

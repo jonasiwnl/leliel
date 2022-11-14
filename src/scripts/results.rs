@@ -12,7 +12,6 @@ impl Status {
             Status::DNE => "this username is available.".to_string(),
             Status::ILLEGAL => "this username isn't allowed.".to_string(),
             Status::ERR => "an error occured.".to_string(),
-            _ => "".to_string(),
         }
     }
 }

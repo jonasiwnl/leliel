@@ -4,7 +4,7 @@
 pub async fn run(flag: &String, needle: &String) -> Result<(), reqwest::Error> {
     match flag.as_str() {
         "u" | "user" | "username" => user::user(needle).await,
-        "e" | "email" => email::email(needle),
+        "e" | "email" => email::email(needle).await,
         _ => { 
             eprintln!("invalid flag");
             Ok(())

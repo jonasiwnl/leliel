@@ -1,27 +1,41 @@
-use clap::Parser;
+mod commands;
+mod types;
 
-mod scripts;
-use crate::scripts::run::run;
+use clap::Parser;
+use std::error::Error;
+use commands::{email, user};
 
 #[derive(Parser)]
 #[clap(author = "arael", version, about)]
 /// a basic osint cli
 struct Command {
     flag: String,
-    #[clap(default_value_t = ("".to_string()), short, long)]
-    needle: String,
+    needle: Option<String>,
+}
+
+pub async fn run(flag: &String, needle: &String) -> Result<(), Box<dyn Error>> {
+    match flag.as_str() {
+        "u" | "user" | "username" => user::user(needle).await,
+        "e" | "email" => email::email(needle).await,
+        _ => { 
+            println!("Invalid flag!");
+            Ok(())
+        },
+    }
 }
 
 #[tokio::main]
-async fn main() -> Result<(), reqwest::Error> {
+async fn main() -> Result<(), Box<dyn Error>> {
     println!("\nSTARTING...\n");
 
     let args = Command::parse();
     let flag = args.flag;
     let needle = args.needle;
 
-    match run(&flag, &needle).await {
-        Ok(o) => Ok(o),
-        Err(c) => Err(c),
+    if needle.is_none() {
+        println!("No needle provided!");
+        return Ok(());
     }
+
+    run(&flag, &needle.unwrap()).await
 }

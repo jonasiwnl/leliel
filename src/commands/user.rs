@@ -1,13 +1,13 @@
 use std::sync::{Arc, Mutex};
+use std::error::Error;
+use crate::types::QueryResult;
 // use std::thread;
-
-use crate::scripts::results::{QueryResult, Status};
 
 const URLS: &'static [&'static str] = &[
     "hi mom/",
 ];
 
-pub async fn user(needle: &String) -> Result<(), reqwest::Error>{
+pub async fn user(needle: &String) -> Result<(), Box<dyn Error>>{
     let client = reqwest::Client::new();
     let data = Arc::new(
         Mutex::<Vec<QueryResult>>::new(vec![])
@@ -16,11 +16,13 @@ pub async fn user(needle: &String) -> Result<(), reqwest::Error>{
         let req_url = url.to_string() + needle;
         let resp = client.get(&req_url).send().await;
 
-        if let Err(e) = resp { return Err(e) }
+        if let Err(e) = resp { return Err(Box::new(e)) }
 
-        let query_result = QueryResult::new(url.to_string(), 
-                                                        req_url, 
-                                                        Status::DNE, 0);
+        let query_result = QueryResult::new(
+            url.to_string(),
+            req_url,
+            0
+        );
 
         let c_data = Arc::clone(&data);
         let results = &mut *c_data.lock().unwrap();

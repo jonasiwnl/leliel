@@ -11,3 +11,8 @@ impl QueryResult {
         QueryResult{ url, user_url, query_time }
     }
 }
+
+enum LelielError {
+    
+}
+

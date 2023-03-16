@@ -1,8 +1,7 @@
 use std::sync::{Arc, Mutex};
 use std::error::Error;
+use crate::types::QueryResult;
 // use std::thread;
-
-use crate::scripts::results::QueryResult;
 
 const URLS: &'static [&'static str] = &[
     "hi mom/",

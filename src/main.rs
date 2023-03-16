@@ -1,7 +1,9 @@
+mod commands;
+mod types;
+
 use clap::Parser;
 use std::error::Error;
-mod scripts;
-use crate::scripts::run::run;
+use commands::{email, user};
 
 #[derive(Parser)]
 #[clap(author = "arael", version, about)]
@@ -9,6 +11,17 @@ use crate::scripts::run::run;
 struct Command {
     flag: String,
     needle: Option<String>,
+}
+
+pub async fn run(flag: &String, needle: &String) -> Result<(), Box<dyn Error>> {
+    match flag.as_str() {
+        "u" | "user" | "username" => user::user(needle).await,
+        "e" | "email" => email::email(needle).await,
+        _ => { 
+            println!("Invalid flag!");
+            Ok(())
+        },
+    }
 }
 
 #[tokio::main]
